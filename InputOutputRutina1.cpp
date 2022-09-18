@@ -13,7 +13,7 @@
 int TC, a, b;
 scanf("%d", &TC); //nro de casos
 
-while(TC --){ //repite hasta 0
+while(TC--){ //repite hasta 0
 	scanf("%d%d", &a, &b);
 	//calcular la resp
 	printf("%d \n", a + b);
