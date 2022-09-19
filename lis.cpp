@@ -27,21 +27,23 @@ int main(){
 		scanf("%d", &k); // tam de la secuencia de entrada
 		vector<int> seq;	//aca se almacena la secuencia de entrada a analizar.
 		if (c > 1) fill(MEMO.begin(), MEMO.end(), -1);// limpiar MEMO solo cuando hay mas de 1 secuencia de entrada
-		MEMO[0] = 1;
 		
+		MEMO[0] = 1;// el primer elemento siempre es 1
+		//armar la secuencia de entrada:
 		while (k--) { 
 			scanf("%d", &v);
 			seq.push_back(v);
 		}
-		c++;
+		//calcular la respuesta:
 			
 		int resul = LISDP(seq, seq.size());
 		
-		//calcular la resp
+		//Mostrar resultado y el vector memorizado (MEMO):
 		printf("%d \n", resul);
 		print(MEMO);
 		
-		
+		//aumentar el numero de caso(solo se usa para saber si es necesario reiniciar el vector MEMO
+		c++;
 		
 	}
 		return 0;
