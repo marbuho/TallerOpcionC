@@ -20,13 +20,15 @@ using namespace std;
 
 int LCS(string s1, string s2);
 int main(){
-	int a,b;
-	printf("run...");
-	string s1 = "oasdf";
-	string s2 = "hoasdfs";
-	int result = LCS(s1, s2);
-	printf("Case #: you can visit at most %d cities\n", result);
-	
+	string s1, s2;
+	cin >> s1;
+	while (s1.compare("#") != 0){
+		cin >> s2;
+		int result = LCS(s1, s2);
+		printf("Case #: you can visit at most %d cities\n", result);
+		cout << "ingresar s1";
+		cin >> s1;
+	}
 		
 	return 0;
 }
