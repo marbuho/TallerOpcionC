@@ -22,11 +22,11 @@ int LCS(string s1, string s2);
 int main(){
 	string s1, s2;
 	cin >> s1;
+	int TC = 1;
 	while (s1.compare("#") != 0){
 		cin >> s2;
 		int result = LCS(s1, s2);
-		printf("Case #: you can visit at most %d cities\n", result);
-		cout << "ingresar s1";
+		printf("Case #%d: you can visit at most %d cities\n", TC++, result);
 		cin >> s1;
 	}
 		
@@ -38,15 +38,16 @@ int LCS(string s1, string s2) {
 	int memoization[n][m], i, j;
 		// Creacion de la matriz de calculo, se usara para almacenar resultados 
 		// del overlapig subproblem:
-		for(i = 0; i <= n; i++) memoization[i][0] = 0;
-		for(j = 0; j <= n; j++) memoization[0][j] = 0;
+		for(i = 0; i < n; i++) memoization[i][0] = 0;
+		for(j = 0; j < m; j++) memoization[0][j] = 0;
 	// caculculo:
 	for(i = 1; i < n; i++){
-		for(j = 1; j < m; j++)
+		for(j = 1; j < m; j++){
 			if(s1[i-1] == s2[j-1])
 				memoization[i][j] = memoization[i-1][j-1] + 1; // si son igulaes se suma 1 a celda diagonal superior izquierda
 			else
 				memoization[i][j] = max(memoization[i-1][j], memoization[i][j-1]);  // si son != se queda con le maximo (celda de arriba y celda izq)
+		}
 	}
 		
 	return memoization[n-1][m-1];
