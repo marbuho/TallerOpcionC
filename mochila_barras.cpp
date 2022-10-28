@@ -51,16 +51,28 @@ int main():
 bool mochilabarras(int ldese, int cant, barras[]){
 	int N = cant;
 	int K = ldese; 
-	int elem[N][2];
-	int DP[N+1][K+1];
+	bool DP[N+1][K+1];
 
-	for (int i=0; i<=N; i++) DP[i][0] = 0;
-	for (int j=0; j<=K; j++) DP[0][j] = 0;
+	for (int i=0; i<=N; i++) DP[i][0] = True;// completo primera columna
+	for (int j=0; j<=K; j++) DP[0][j] = False;// completo primera fila
+	DP[0][0] = True;
 	
 	for (int i=1; i<=N; i++) {
 		for (int j=1; j<=K; j++) {
+			if (barra[i-1]> j) DP[i][j] = DP[i-1][j];
+			else{
+				if DP[i-1][j]
+					DP[i][j] = True;
+				else
+				if (j-barras[i]) == True; -> true
+				
+				
+				 
+			}
+			
+			/*
 			if (elem[i-1][0] > j) DP[i][j] = DP[i-1][j];
-			else DP[i][j] = max(DP[i-1][j], DP[i-1][j-elem[i-1][0]] + elem[i-1][1]);
+			else DP[i][j] = max(DP[i-1][j], DP[i-1][j-elem[i-1][0]] + elem[i-1][1]);*/
 		}
 	}
 	
