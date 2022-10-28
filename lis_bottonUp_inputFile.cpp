@@ -34,6 +34,7 @@ int main(){
 		//CORREGIR SE ESTA ARMANDO MAL LA SECUENCIA. 
 		printf ("Max hits: %d\n", maxLen);
 		// armado de la sub secuencia LIS:
+		/* MAL:
 		vector<int> sub_seq;
 		sub_seq.push_back(seq.at(i_max));
 		int aux = maxLen - 1;
@@ -44,9 +45,21 @@ int main(){
 			sub_seq.push_back(val);
 			aux--;
 		}
+		*/
+		// no lo prove pero creo q quedaria asi:
+		int i = i_max;
+		sub_seq.push_back(seq.at(i));
+		while (PREV[i] != -1){ 
+			i_ant = PREV[i];
+		       	valor = seq[i_ant];
+			sub_seq.push_back(valor);
+			i = i_ant;
+		}
 		//lectura inversa: (la subsecuencia  creciencte esta armada de derecha a izquierda)
 		for (auto itr = sub_seq.end() - 1;itr !=  sub_seq.begin() - 1; itr--)
 	        cout << *itr << endl;
+		
+		
 	        
 	    DP.clear();
 	    PREV.clear();
