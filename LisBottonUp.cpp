@@ -1,6 +1,7 @@
 /* Strategic Defense Inisiative
 Sample Input:
 1
+
 1
 6
 2
