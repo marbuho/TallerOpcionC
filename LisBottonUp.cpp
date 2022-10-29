@@ -1,16 +1,30 @@
+/* Strategic Defense Inisiative
+Sample Input:
+1
+1
+6
+2
+3
+5
+Sample Output:
+Max hits: 4
+1
+2
+3
+5*/
+
 #include <stdio.h>
 #include <string>
 #include <iostream>
 #include <vector>
-
 using namespace std;
 
 int lis(vector<int> seq);
-vector<int> DP;
-vector<int> PREV;
+vector<int> DP; // variables globales, DP es donde se hace memoization
+vector<int> PREV; // se almacena el previo, para poder reconstruir la subseq resultado
 
 int main(){
-	printf("corriend....\n");
+	//printf("corriend....\n");
 	int TC,v,c;
 	string str;
 	scanf("%d", &TC);
@@ -24,29 +38,29 @@ int main(){
 			seq.push_back(v);
 		}	
 		//calcular secuencia:
-		int i_max = lis(seq);
-		int maxLen = DP.at(i_max);
+		int i_max = lis(seq); // la funcion devuelve el indice, no el valor
+		int maxLen = DP.at(i_max); 
 		if (c++ > 1) printf("\n"); // para que deje lineas en blanco solo entre test
 		printf ("Max hits: %d\n", maxLen);
-		// armado de la sub secuencia LIS:
-		//CORREGIR SE ESTA ARMANDO MAL LA SECUENCIA. 
-		vector<int> sub_seq;
+		
+		// armado de la sub secuencia LIS: 
+		vector<int> sub_seq; // aca se guarda la subsecuencia LIS
+		
+		// se arma desde el mayor al menor.
 		sub_seq.push_back(seq.at(i_max));
-		int aux = maxLen - 1;
-		while (aux > 0) { 
-			int j = PREV.at(i_max--);
-			if (j == -1) continue;
-			int val = seq.at(j);
-			sub_seq.push_back(val);
-			aux--;
+		int j = i_max;
+		int ant;
+		while (PREV[j] != -1){ 
+			ant = PREV[j];
+		    int valor = seq[ant];
+			sub_seq.push_back(valor);
+			j = ant;
 		}
 		//lectura inversa: (la subsecuencia  creciencte esta armada de derecha a izquierda)
-		for (auto itr = sub_seq.end() - 1;itr !=  sub_seq.begin() - 1; itr--)
+		for (auto itr = sub_seq.end() - 1; itr !=  sub_seq.begin() - 1; itr--)
 	        cout << *itr << endl;
-	        
 	    
-	    
-	        
+		//limpiar para el prox TC
 	    DP.clear();
 	    PREV.clear();
 	}
@@ -75,7 +89,8 @@ int lis(vector<int> seq){
 	}
 	return ult_i; 
 }
-	// ult_i tendrá la posición (enla secuencia original)
-//	del ultimo elemento de la subsecuencia final.
-// ejemplo seq = 2 6 3 4 5 1, ult_i = 4 (seq[4] = 5, el maximo de: 2 3 4 5)
-// PREV = -1 0 0 2 3 -1 
+/*  ult_i tendrá la posición (de la secuencia original)
+	del ultimo elemento de la subsecuencia final.
+	ejemplo seq = 2 6 3 4 5 1, -> ult_i = 4 donde seq[4] = 5, el maximo de: 2 3 4 5
+	PREV = -1 0 0 2 3 -1
+ */
