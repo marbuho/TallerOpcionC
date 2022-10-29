@@ -28,9 +28,9 @@ int main(){
 	int TC,v,c;
 	string str;
 	scanf("%d", &TC);
-	c = 1;
+	getline (cin, str);
 	while(TC--){
-		if (c == 1) getline (cin, str);  //saltea la 1era linea en blanco (solo en el 1ert Test)
+		getline (cin, str);  //saltea linea en blanco (solo en el 1ert Test)
 		vector<int> seq;
 		while (getline (cin, str)){ // armado de la secuencia de entrada
 			if (str.size() == 0) break;
@@ -50,7 +50,7 @@ int main(){
 		sub_seq.push_back(seq.at(i_max));
 		int j = i_max;
 		int ant;
-		while (PREV[j] != -1){ 
+		for (int k = 1; k < maxLen; k++){ 
 			ant = PREV[j];
 		    int valor = seq[ant];
 			sub_seq.push_back(valor);
