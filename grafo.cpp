@@ -30,12 +30,13 @@ int main () {
     int w; // vertice ady (vecino)
     while (scanf("%d", &n), (n != 0) ){  // leer hasta que recibe un vertice v de valor = 0
     		cout<< "n="<< n <<endl;
-    		scanf("%d", &v);
-    		while (scanf("%d", &w)){
+    		
+    		while (scanf("%d", &v), scanf("%d", &w)){
     				cout<< "v="<< v <<endl;
 	    			cout<< "w="<< w <<endl;
 	    			cout<<"se hace el push en grafo:"<< v <<" push_back(w=" <<w <<")"<<endl;
 					grafo[v].push_back(w) ;// arma el grafo
+					
 			}
     		cout<<"estoy aca"<<endl;
 		
