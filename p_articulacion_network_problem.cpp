@@ -10,17 +10,17 @@ using namespace std;
 //globales:
 const int MAX_VERTI = 110;
 vector<int> grafo[MAX_VERTI]; // Lista de adjacencia. 
-bool visit[MAX_VERTI] = {false}; // array de nodos visitados, por default se crea en false
+bool visit[MAX_VERTI]; // array de nodos visitados, por default se crea en false
 int dfs_orden[MAX_VERTI]; // array se usara para alamacenar el n de orden en que se visitio cada v
 int low[MAX_VERTI]; // array para guardar el ancestro mas viejo de cada v
 int padre[MAX_VERTI];
-vector <int> pts_arti; // para guardar aquellos que son ptos de arti
+vector <bool> pts_arti; // para guardar true aquellos v que son ptos de arti
 int dfs_raiz; //para registrar el nodo inicial del reco
 int hijos_raiz; //cont la cant de hijos del nodo raiz
 void PUNTOS_ART(int);
 void BUSCAR_PA(int , int);
 int main () {
-  	cout<<"Run..."<<endl;
+  	//cout<<"Run..."<<endl;
     /*cargar grafo, datos de entrada*/
     
     int n; // n: Cantidad de nodos,
@@ -40,38 +40,42 @@ int main () {
 	        }
 	        getline(cin, line);
 	    }
-		/*mostrar el grafo
-		cout<<"Grafo:"<<endl;
+	    /*
+	    cout<<"Grafo:"<<endl;
 	    for (int v = 0; v <= n; ++v) {
 	        cout << "\n lista de ady del vertice " << v
 	             << "\n V ";
 	        for (auto x : grafo[v])
 	            cout << "-> " << x;
 	        printf("\n");
-	    }*/
+			}*/
+	
 	for (int i=0; i<=n;i++){
 		pts_arti.push_back(false);
 	}
     /*contar puntos de articualcion*/
     	PUNTOS_ART(n);
     
-    
-	    /*imprimir resultado*/
-	    printf("resultado %d", count(pts_arti.begin(), pts_arti.end(), true));
-	    printf("%d hijos");
+    /*imprimir resultado*/
+    printf("%d\n", count(pts_arti.begin(), pts_arti.end(), true)); // cuenta aquellso q resultaron ser ptos de arti (quedan en true)
 	    
-	        cout << "\n ptso de arti \n";
-	            
+	           /* para debug
 	        for (auto x : pts_arti)
 	            cout << "-> " << x;
 	        printf("\n");
-	
+	        
+	        for (int x=1; x<=n;x++)
+	            cout << "v: " << x <<" valor:"  << dfs_orden[x];
+	        printf(" LOW: \n");    
+	            for (int x=1; x<=n;x++)
+	            cout << "v: " << x <<" valor:" << low[x];
+	            */ 
 	   /*limpiar para el sig test*/
 	    for (auto& v : grafo) {
 				v.clear();
 			}
 		pts_arti.clear();
-	
+		
 		scanf("%d", &n)	;
 
 	}
@@ -87,15 +91,16 @@ se implementea como un array de vectores, cada elemento del array es un vector d
 void PUNTOS_ART(int n){
     int padre[n]; // para almacenar el v padre de cada v
 	int cont = 1;
+	memset(visit, 0, n+1); // marcaar todo como false
 	
     for (int v = 1; v <= n; v++){
     	if (!visit[v]){
     		dfs_raiz = v;
     		hijos_raiz = 0;
     		BUSCAR_PA(v, cont);
-    		if (hijos_raiz > 1){ // es un pto de arti
+    		if (hijos_raiz > 1) // es un pto de arti
     			pts_arti.at(dfs_raiz) = true;
-			}
+
 		} 
 	}
 	
@@ -109,9 +114,13 @@ void BUSCAR_PA(int v, int cont){
 			padre[w] = v;
 			if (v == dfs_raiz)
 				hijos_raiz++;
+			
 			BUSCAR_PA(w ,cont);
-			if (low[w] >= dfs_orden[v])
+			
+		
+			if (low[w] >= dfs_orden[v] && v != dfs_raiz )
 				pts_arti.at(v) = true; // es pto de arti
+			
 			low[v] = min(low[v], low[w]);
 		}
 		else if(w != padre[v]){
