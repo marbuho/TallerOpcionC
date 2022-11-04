@@ -1,3 +1,21 @@
+/*input:
+3
+2 1 0 1
+0 1 100
+3 3 2 0
+0 1 100
+0 2 200
+1 2 50
+2 0 0 1
+
+output
+
+Case #1: 100
+Case #2: 150
+Case #3: unreachable
+*/
+
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -20,6 +38,28 @@ class SMTPRed
 
 int main()
 {
+ 
+//leer entrada para armar la red:	
+scanf("%d", &TC);
+
+while (TC--){
+	
+	
+	
+	
+}
+
+//procear la respuesta
+
+//int costo = dijkstra(grafo , n);
+
+//mostrar resultado
+	
+	
+	
+	
+	
+	
   //graph of five vertices
   SMTPRed smtpr1(5);
   //adding edges
