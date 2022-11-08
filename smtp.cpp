@@ -23,64 +23,85 @@ using namespace std;
 
 //clase para un grafo no dirigido pesado 
 
-class SMTPRed
-{
-  public:vector< pair<int,int> > * adya_list; // un puntero a un vector que almacena pares
+class SMTPRed{
+public:		
+  vector< pair<int,int> > * adya_list; // un puntero a un vector que almacena pares
   int vertices; // cant de servidores
-  public:
-  SMTPRed(int n)
-  {
-    vertices=n;
-    adya_list=new vector< pair<int,int> >[n]; //  n vectores, (1 para cada vertice, cada vector rep la lista de adyacencia,
-    // el vec contiene elementos par, (u, lat) u es el vert de destino, y lat la latencia del cable, (peso de la arista)
-  }
-  void agregar_conex(int v1,int v2,int lat);
-  void mostrar_red();
+  
+  
+	SMTPRed(int n){
+		vertices=n;
+		adya_list= new vector< pair<int,int> >[n]; //  n vectores, (1 para cada vertice, cada vector rep la lista de adyacencia,
+	// el vec contiene elementos par, (u, lat) u es el vert de destino, y lat la latencia del cable, (peso de la arista)
+	}
+	void agregar_conex(int v1,int v2,int lat){
+	// conecttar v1 con v2 y viceversa
+	  adya_list[v1].push_back(make_pair(v2,lat));
+	  adya_list[v2].push_back(make_pair(v1,lat));
+	}
+	void mostrar_red(){
+  		int servidor,lat;
+	  	//Para cada v, se muestra su lista de ady
+		for(int i=0;i<vertices;i++){
+		  	cout<<"Ady lista del vertice "<<i<<endl;
+		// para cada lista,  se muestra su contenido
+			for(auto it=adya_list[i].begin();it!=adya_list[i].end();it++){
+				  //setea  en servidor como el n de vertice, y lat, como la latencia del cable
+				  servidor=it->first; // first y second son usados para acceder al primer y al segundo elemento del par respect.
+				  lat=it->second;
+				  cout<<"Servidor : "<<servidor<<" Latencia : "<<lat<<endl;
+			}
+			cout<<endl;
+		}
+	}
 };
 
-int main()
-{
-string linea; 
-int TC, n,m, origen,desti, v1, v2, lat;	
-//leer entrada para armar la red:	
-scanf("%d", &TC);
-cin.ignore();
+int main(){
+	string linea; 
+	int TC, n,m, origen,desti, v1, v2, lat;	
+	//leer entrada para armar la red:	
+	scanf("%d", &TC);
+	cin.ignore();
 
-while (TC--){
-  getline(cin, linea);
-    stringstream ss(linea);
-    ss >> n; // cantidad de nodos
-      cout<< "n="<< n <<endl;
-    ss >> m; // cantidad de aristas
-      cout<< "m="<< m <<endl;
-    ss >> origen; // nodo S
-      cout<< "origen="<< origen <<endl;
-    ss >> desti; // nodo T
-      cout<< "destino="<< desti <<endl;
-      
-    SMTPRed smtpr1(n);  
-    for (int i = 0; i< m; i++){
-        getline(cin, linea);
-        stringstream ss(linea);
-        ss >> v1; // origen del cable
-        ss >> v2; // destino del cable
-        ss >> lat; // latencia 
-        smtpr1.agregar_conex(v1, v2, lat); // conecto los nodos, 
-    }
-    smtpr1.mostrar_red();
-    
-    
-    bool visit[n]; // Vector de nodos visitados
-    int infinito = m + 1;// el camino no puede ser mas largo que la cantidad de cables
-    
-        
-    for(auto it=smtpr1.adya_list[1].begin();it!=smtpr1.adya_list[1].end();it++){
-        int servidor=it->first; // first y second son usados para acceder al primer y al segundo elemento del par respect.
-        int lat=it->second;
-            
-            
-        cout<<"Servidor : "<<servidor<<" Latencia : "<<lat<<endl;
-        }
+	while (TC--){
+	  	getline(cin, linea);
+	    stringstream ss(linea);
+	    ss >> n; // cantidad de nodos
+	      cout<< "n="<< n <<endl;
+	    ss >> m; // cantidad de aristas
+	      cout<< "m="<< m <<endl;
+	    ss >> origen; // nodo S
+	      cout<< "origen="<< origen <<endl;
+	    ss >> desti; // nodo T
+	      cout<< "destino="<< desti <<endl;
+	      
+	    SMTPRed smtpr1(n);  
+	    for (int i = 0; i< m; i++){
+	        getline(cin, linea);
+	        stringstream ss(linea);
+	        ss >> v1; // origen del cable
+	        ss >> v2; // destino del cable
+	        ss >> lat; // latencia 
+	        smtpr1.agregar_conex(v1, v2, lat); // conecto los nodos, 
+	    }
+	    smtpr1.mostrar_red();
+	    
+	    bool visit[n]; // Vector de nodos visitados
+	    int infinito = m + 1;// el camino no puede ser mas largo que la cantidad de cables
+	    
+	      
+	    for(auto it=smtpr1.adya_list[1].begin();it!=smtpr1.adya_list[1].end();it++){
+	        int servidor=it->first; // first y second son usados para acceder al primer y al segundo elemento del par respect.
+	        int lat=it->second;
+	            
+	            
+	        cout<<"Servidorr : "<<servidor<<" Latenciaa : "<<lat<<endl;
+	    }
+	}
+	
+	return 0;
+}
+    /*
     //procear la respuesta
     DFS(int v) {
     visit[v] = true;    
@@ -91,29 +112,9 @@ while (TC--){
             if (!visit[u])
                 DFS(u);
         }
-    }
-}
-    
+    }*/
     
 
-    //mostrar resultado
-
- 
-}
-
-
-	
-	
-int costoMinimo(int s, int d, SMTPRed red){
-    int infinito = red.vertices + 2; // nunca puede sar mayor a la can de aristas
-    costoactual = infinito;
-    bool visit[n]; // Vector de nodos visitados
-    
-    
-    
-    
-    
-}	
 	
 	
 	/*
@@ -128,33 +129,8 @@ int costoMinimo(int s, int d, SMTPRed red){
   smtpr1.agregar_conex(4,0,10);
   //displaying the graph
   smtpr1.mostrar_red();*/
-  return 0;
-}
-//definición de metodos
 
-void SMTPRed::agregar_conex(int v1,int v2,int lat)
-{
-  // conecttar v1 con v2 y viceversa
-  adya_list[v1].push_back(make_pair(v2,lat));
-  adya_list[v2].push_back(make_pair(v1,lat));
-}
 
-void SMTPRed::mostrar_red()
-{
-  int servidor,lat;
-  //Para cada v, se muestra su lista de ady
-  for(int i=0;i<vertices;i++)
-  {
-      cout<<"Ady lista del vertice "<<i<<endl;
-    // para cada lista,  se muestra su contenido
-    for(auto it=adya_list[i].begin();it!=adya_list[i].end();it++)
-    {
-      //setea  en servidor como el n de vertice, y lat, como la latencia del cable
-      servidor=it->first; // first y second son usados para acceder al primer y al segundo elemento del par respect.
-      lat=it->second;
-      cout<<"Servidor : "<<servidor<<" Latencia : "<<lat<<endl;
-    }
-    cout<<endl;
-  }
-  
-}
+
+
+
