@@ -27,21 +27,23 @@ vector<int> PREV; // se almacena el previo, para poder reconstruir la subseq res
 int main(){
 	//printf("corriend....\n");
 	int TC,v,c;
+	c=0;
 	string str;
 	scanf("%d", &TC);
-	getline (cin, str);
+	//getline (cin, str);
+	cin.ignore();
+	cin.ignore();
 	while(TC--){
-		getline (cin, str);  //saltea linea en blanco (solo en el 1ert Test)
+		//getline (cin, str);  //saltea linea en blanco (solo en el 1ert Test)
 		vector<int> seq;
-		while (getline (cin, str)){ // armado de la secuencia de entrada
-			if (str.size() == 0) break;
+		while (getline (cin, str) && str != ""){ // armado de la secuencia de entrada
 			v = stoi(str);
 			seq.push_back(v);
 		}	
 		//calcular secuencia:
 		int i_max = lis(seq); // la funcion devuelve el indice, no el valor
 		int maxLen = DP.at(i_max); 
-		if (c++ > 1) printf("\n"); // para que deje lineas en blanco solo entre test
+		
 		printf ("Max hits: %d\n", maxLen);
 		
 		// armado de la sub secuencia LIS: 
@@ -61,6 +63,9 @@ int main(){
 		for (auto itr = sub_seq.end() - 1; itr !=  sub_seq.begin() - 1; itr--)
 	        cout << *itr << endl;
 	    
+	    if (TC > 0)
+	        printf ("\n");
+	        
 		//limpiar para el prox TC
 	    DP.clear();
 	    PREV.clear();
