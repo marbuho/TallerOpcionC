@@ -17,13 +17,15 @@ Case #3: unreachable
 
 
 #include <bits/stdc++.h>
+#include <sstream>
+#include <string>
 using namespace std;
 
 //clase para un grafo no dirigido pesado 
 
 class SMTPRed
 {
-  vector< pair<int,int> > * adya_list; // un puntero a un vector que almacena pares
+  public:vector< pair<int,int> > * adya_list; // un puntero a un vector que almacena pares
   int vertices; // cant de servidores
   public:
   SMTPRed(int n)
@@ -38,28 +40,83 @@ class SMTPRed
 
 int main()
 {
- 
+string linea; 
+int TC, n,m, origen,desti, v1, v2, lat;	
 //leer entrada para armar la red:	
 scanf("%d", &TC);
+cin.ignore();
 
 while (TC--){
-	
-	
-	
-	
+  getline(cin, linea);
+    stringstream ss(linea);
+    ss >> n; // cantidad de nodos
+      cout<< "n="<< n <<endl;
+    ss >> m; // cantidad de aristas
+      cout<< "m="<< m <<endl;
+    ss >> origen; // nodo S
+      cout<< "origen="<< origen <<endl;
+    ss >> desti; // nodo T
+      cout<< "destino="<< desti <<endl;
+      
+    SMTPRed smtpr1(n);  
+    for (int i = 0; i< m; i++){
+        getline(cin, linea);
+        stringstream ss(linea);
+        ss >> v1; // origen del cable
+        ss >> v2; // destino del cable
+        ss >> lat; // latencia 
+        smtpr1.agregar_conex(v1, v2, lat); // conecto los nodos, 
+    }
+    smtpr1.mostrar_red();
+    
+    
+    bool visit[n]; // Vector de nodos visitados
+    int infinito = m + 1;// el camino no puede ser mas largo que la cantidad de cables
+    
+        
+    for(auto it=smtpr1.adya_list[1].begin();it!=smtpr1.adya_list[1].end();it++){
+        int servidor=it->first; // first y second son usados para acceder al primer y al segundo elemento del par respect.
+        int lat=it->second;
+            
+            
+        cout<<"Servidor : "<<servidor<<" Latencia : "<<lat<<endl;
+        }
+    //procear la respuesta
+    DFS(int v) {
+    visit[v] = true;    
+     if (!visit[w]){
+         for(auto it=smtpr1.adya_list[v].begin();it!=smtpr1.adya_list[v].end();it++){//Recorro la lista de adyacentes
+            int u=it->first; // first y second son usados para acceder al primer y al segundo elemento del par respect.
+            int lat=it->second;
+            if (!visit[u])
+                DFS(u);
+        }
+    }
+}
+    
+    
+
+    //mostrar resultado
+
+ 
 }
 
-//procear la respuesta
 
-//int costo = dijkstra(grafo , n);
-
-//mostrar resultado
 	
 	
+int costoMinimo(int s, int d, SMTPRed red){
+    int infinito = red.vertices + 2; // nunca puede sar mayor a la can de aristas
+    costoactual = infinito;
+    bool visit[n]; // Vector de nodos visitados
+    
+    
+    
+    
+    
+}	
 	
 	
-	
-	
+	/*
   //graph of five vertices
   SMTPRed smtpr1(5);
   //adding edges
@@ -70,7 +127,7 @@ while (TC--){
   smtpr1.agregar_conex(2,4,100);
   smtpr1.agregar_conex(4,0,10);
   //displaying the graph
-  smtpr1.mostrar_red();
+  smtpr1.mostrar_red();*/
   return 0;
 }
 //definición de metodos
@@ -99,4 +156,5 @@ void SMTPRed::mostrar_red()
     }
     cout<<endl;
   }
+  
 }
