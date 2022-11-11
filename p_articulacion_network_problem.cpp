@@ -2,6 +2,7 @@
 #include <vector>
 #include<algorithm> // para usar funcion min
 #include <sstream>
+#include <cstring>
 
 using namespace std;
 
@@ -57,7 +58,8 @@ int main () {
     	PUNTOS_ART(n);
     
     /*imprimir resultado*/
-    printf("%d\n", count(pts_arti.begin(), pts_arti.end(), true)); // cuenta aquellso q resultaron ser ptos de arti (quedan en true)
+    int  result = count(pts_arti.begin(), pts_arti.end(), true);
+    printf("%d\n", result); // cuenta aquellso q resultaron ser ptos de arti (quedan en true)
 	    
 	           /* para debug
 	        for (auto x : pts_arti)
