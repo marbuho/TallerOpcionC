@@ -55,28 +55,25 @@ void show(priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<in
 
 int main(){
 	//printf("run.....\n");
-	ofstream myfile;
- 	myfile.open ("example2.txt");
+	//ofstream myfile;
+ 	//myfile.open ("example2.txt");
     string linea;
     int TC, n,m, origen,desti, v1, v2, lat;
     //leer entrada para armar la red:
     scanf("%d", &TC); // lee la cantidad de test 
     int c = 1;
-    int l = 1;
     while (TC--){
 	    scanf("%d%d%d%d", &n, &m, &origen, &desti); // lee 4 numeros por fila, n m S T
-	    l++;
 	    SMTPRed red(n); // red con n servidores
 	    // armar las conexiones
 	    for (int i = 0; i< m; i++){
 	        scanf("%d%d%d", &v1, &v2, &lat);
-	        l++;
 	        red.agregar_conex(v1, v2, lat); // conecto los nodos,
 	    }
     	
     	// casos extremos: 
         if (n==0 || m==0){
-        //	myfile << "Case #"<< c << ": unreachable" << l<<endl;
+        	//myfile << "Case #"<< c << ": unreachable"<<endl;
 			printf("Case #%d: unreachable\n",c++);
 			continue; // si no hay nodos o no hay conexiones, saltea el caso
         }
@@ -84,17 +81,17 @@ int main(){
         
         int result = minCostDestino_dijkstra(red, origen, desti);
         if (result == INT_MAX){
-        	//myfile << "Case #"<< c << ": unreachableMAX" << l<<endl;
+        	//myfile << "Case #"<< c << ": unreachable" <<endl;
         	printf("Case #%d: unreachable\n",c++);
 		}
 		else{
-		//	myfile << "Case #"<< c << ": " << result<<" linea: "<< l <<endl;
+			//myfile << "Case #"<< c << ": " << result<<endl;
 			printf("Case #%d: %d\n",c++, result);
 		}
        
     
     }
-    myfile.close();
+    //myfile.close();
     return 0;
 }
     //procear la respuesta
