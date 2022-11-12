@@ -22,6 +22,7 @@ Case #3: unreachable
 #include <climits>
 #include <queue>
 #include <iostream>
+#include <fstream>
 
 
 
@@ -54,36 +55,46 @@ void show(priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<in
 
 int main(){
 	//printf("run.....\n");
+	ofstream myfile;
+ 	myfile.open ("example2.txt");
     string linea;
     int TC, n,m, origen,desti, v1, v2, lat;
     //leer entrada para armar la red:
     scanf("%d", &TC); // lee la cantidad de test 
     int c = 1;
+    int l = 1;
     while (TC--){
 	    scanf("%d%d%d%d", &n, &m, &origen, &desti); // lee 4 numeros por fila, n m S T
+	    l++;
 	    SMTPRed red(n); // red con n servidores
 	    // armar las conexiones
 	    for (int i = 0; i< m; i++){
 	        scanf("%d%d%d", &v1, &v2, &lat);
+	        l++;
 	        red.agregar_conex(v1, v2, lat); // conecto los nodos,
 	    }
     	
     	// casos extremos: 
         if (n==0 || m==0){
+        //	myfile << "Case #"<< c << ": unreachable" << l<<endl;
 			printf("Case #%d: unreachable\n",c++);
 			continue; // si no hay nodos o no hay conexiones, saltea el caso
         }
         
         
         int result = minCostDestino_dijkstra(red, origen, desti);
-        if (result == INT_MAX)
+        if (result == INT_MAX){
+        	//myfile << "Case #"<< c << ": unreachableMAX" << l<<endl;
         	printf("Case #%d: unreachable\n",c++);
-		else
+		}
+		else{
+		//	myfile << "Case #"<< c << ": " << result<<" linea: "<< l <<endl;
 			printf("Case #%d: %d\n",c++, result);
+		}
        
     
     }
-    
+    myfile.close();
     return 0;
 }
     //procear la respuesta
@@ -105,26 +116,26 @@ int minCostDestino_dijkstra(SMTPRed red, int inicio, int destino) {
 	
 	
 	distanciasmin.at(inicio) = 0; // la distancia min del origen del recorrido es 0
-	for (int i = 0; i < n; i++){ // se repite n veces (n cantidad de nodos)
+	while (!minHeap.empty() ){ // se repite n veces (n cantidad de nodos)
 		//int u = mininoverti_noproce(distanciasmin, procesados); // obtendra el verti tenga menor distancia
 		// reemplzar sacadno el top de la min heap (la heap ya no tendra este v)
 		int u = minHeap.top().second; // tomo el v de dist min no procesado, (el primero sera v=inicio, xq Dv=0)
 		procesados.at(u) = true; // marco el v como procesado. (el index 0 es el v=1)
 		minHeap.pop(); //lo elimino de la heap
-	//	printf("EL minimo no procesado u es %d\n", u);
+		//printf("EL minimo no procesado u es %d\n", u);
 		
 		//printf("se lo marca como procesado\n");
 		for(auto it=red.adya_list[u].begin(); it!=red.adya_list[u].end(); it++){
 			int w = it->first;
             int lat = it->second;
-            	printf("para el vecino w = %d se fija si tiene que actualizar\n", w);
+            	//printf("para el vecino w = %d se fija si tiene que actualizar\n", w);
 			if (!procesados[w]){
 			//	printf("distanciasmin.at(%d) > distanciasmin.at(%d) + lat ??\n",w ,u);
 				if(distanciasmin.at(w) > distanciasmin.at(u) + lat){
 				
-				//	printf("resulto que si tine q actualizar\n");
+					//printf("resulto que si tine q actualizar\n");
 					distanciasmin.at(w) = distanciasmin.at(u) + lat;
-					//printf("ahora la distancia a w %d es %d \n", w, distanciasmin.at(w) );
+				//	printf("ahora la distancia a w %d es %d \n", w, distanciasmin.at(w) );
 					minHeap.push(make_pair(distanciasmin.at(w) ,w));
 				}
 			}
