@@ -134,15 +134,16 @@ int main(){
     string line;
     int C, S, Q, v1, v2, p, count, origen, destino;
     //leer entrada para armar la red:
+    vector<tuple<int, int, int> > aristas;
     count = 1;
 	while(true){
-	    vector<tuple<int, int, int> > aristas;
+	    
 	    getline(cin, line);
 		stringstream ss(line);
 		ss >> C;
 		ss >> S;
 		ss >> Q;
-	//	cout<< "C="<< C <<endl; 
+	//cout<< "C="<< C <<endl; 
     //	cout<< "S="<< S << endl; 
     //	cout<< "Q="<< Q << endl;
 		
@@ -154,29 +155,23 @@ int main(){
 			ss >> v1;
 			ss >> v2;
 			ss >> p;
-			//cout<< "v1="<< v1 <<endl; 
-	    	//cout<< "v2="<< v2 << endl; 
-	    	//cout<< "p="<< p << endl;
+		//	cout<< "v1="<< v1 <<endl; 
+	   // cout<< "v2="<< v2 << endl; 
+	    //	cout<< "p="<< p << endl;
 			aristas.push_back(make_tuple(p, v1, v2));
 		}
 		sort(aristas.begin(), aristas.end());
-		//printf("se ordeno el sort\n");
+		printf("se ordeno el sort\n");
 		
 		
 		Grafo arbol_mst = Arbol_MST(aristas, C);
-		//printf("OK calculo el mst\n");
+		printf("OK calculo el mst\n");
 		
 		//printf("Case #%d\n",count++);
 		if (count > 1){  // dejar una linea en blanco entre casos
 			myfile << endl; 
 		} 
 		myfile << "Case #"<< count++ <<endl;
-		/*if (count == 60){  // dejar una linea en blanco entre casos
-			cout<< "C="<< C <<endl; 
-    	cout<< "S="<< S << endl; 
-    	cout<< "Q="<< Q << endl;
-			return 0; 
-		}*/
 		for (int i = 0; i < Q; i++){
 			getline(cin, line);
 			stringstream ss(line);
@@ -235,4 +230,3 @@ int DFS_MaxEnElCamino(Grafo arbol, int inicio, int destino, bool visit[], int ma
 	}
 	return maximo;			
 }
-
