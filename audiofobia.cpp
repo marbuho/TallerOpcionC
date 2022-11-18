@@ -38,30 +38,15 @@ no path
 */
 
 
-#include <vector>
+#include <bits/stdc++.h>
 #include <sstream>
 #include <string>
 #include <climits>
-#include <queue>
 #include <iostream>
 #include <fstream>
+#include <tuple>
 
-class Grafo{
-    public:
-    vector< pair<int,int> > * adya_list; // un puntero a un vector que almacena pares
-    int vertices; // cant de servidores
-    
-    
-    Grafo(int n){
-    vertices=n;
-    adya_list= new vector< pair<int,int> >[n]; // n vectores, (1 para cada vertice, cada vector rep la lista de adyacencia,
-    // el vec contiene elementos par, (u, lat) u es el vert de destino, y lat la latencia del cable, (peso de la arista)
-    }
-    void agregar_conex(int v1,int v2,int lat){
-    // conecttar v1 con v2 y viceversa
-    adya_list[v1].push_back(make_pair(v2,lat));
-    adya_list[v2].push_back(make_pair(v1,lat));
-};
+using namespace std;
 
 struct UFDS {
 	vector<int> p, rank; //también pueden usarse arreglos estáticos
@@ -94,118 +79,143 @@ struct UFDS {
 	}
 };
 
-using namespace std;
+class Grafo{
+    public:
+    vector< pair<int,int> > * adya_list; // un puntero a un vector que almacena pares
+    int vertices; // cant de servidores
+    
+    
+    Grafo(int n){
+	    vertices=n;
+	    adya_list= new vector< pair<int,int> >[n+1]; // n vectores, (1 para cada vertice, cada vector rep la lista de adyacencia,
+    // el vec contiene elementos par, (u, lat) u es el vert de destino, y lat la latencia del cable, (peso de la arista)
+    }
+    void agregar_conex(int v1,int v2,int lat){
+    // conecttar v1 con v2 y viceversa
+    	printf("inicia conexion\n");
+	    adya_list[v1].push_back(make_pair(v2,lat));
+	    printf("conexion simetrica\n");
+	    adya_list[v2].push_back(make_pair(v1,lat));
+	    printf("conexion simetrica ok\n");
+	}
+};
+
+Grafo  Arbol_MST(vector< tuple<int,int,int> > aristas, int V){
+    int v1, v2, p;
+	Grafo arbol_mst  = Grafo(V);
+	// inciar conjuntos
+	UFDS ds = UFDS(V);
+	// armar arbol MST
+    for (int i = 0; i < aristas.size(); i++) {
+        p  = get<0>(aristas[i]);
+        v1 = get<1>(aristas[i]);
+        v2 = get<2>(aristas[i]);
+        printf("se accede a la tupla\n");
+        if(!ds.same_set(v1, v2)){
+            ds.union_set(v1, v2);
+            printf("toca unir el v1=%d y v2=%d peso=%d\n", v1, v2, p);
+            arbol_mst.agregar_conex(v1, v2, p);
+            printf("se agrego conexion\n");
+        }
+    }
+	return arbol_mst;
+}
 
 
+
+int DFS_MaxEnElCamino(Grafo arbol, int v, int destino, bool visit[], int max);
+int MaxEnElCamino(Grafo arbol, int inicio, int destino);
 
 int main(){
-	//printf("run.....\n");
-	//ofstream myfile;
- 	//myfile.open ("example2.txt");
- 	
- 	
- 	
+	printf("runnn...\n");
+	
     string line;
-    int TC, C, S, Q, v1, v2, p, count, origen, destino;
+    int C, S, Q, v1, v2, p, count, origen, destino;
     //leer entrada para armar la red:
     count = 1;
 	while(true){
 	    vector<tuple<int, int, int> > aristas;
-	    
-	   
-	    
+	    getline(cin, line);
 		stringstream ss(line);
 		ss >> C;
 		ss >> S;
 		ss >> Q;
+		cout<< "C="<< C <<endl; 
+    	cout<< "S="<< S << endl; 
+    	cout<< "Q="<< Q << endl;
 		
 		if (C + S + Q == 0) break;
 		
 		for (int i = 0; i < S; i++){
 			getline(cin, line);
+			stringstream ss(line);
 			ss >> v1;
 			ss >> v2;
 			ss >> p;
+			cout<< "v1="<< v1 <<endl; 
+	    	cout<< "v2="<< v2 << endl; 
+	    	cout<< "p="<< p << endl;
 			aristas.push_back(make_tuple(p, v1, v2));
-			
 		}
-		sort(aristas.begin(), aristas.end())
-		
+		sort(aristas.begin(), aristas.end());
+		printf("se ordeno el sort\n");
 		if (count > 1) cout << endl; // dejar una linea en blanco entre casos
 		
-		arbol_mst = Arbol_MST(aristas, C);
+		Grafo arbol_mst = Arbol_MST(aristas, C);
+		printf("se calculo el mst\n");
 		
 		printf("Case #%d\n",count++);
 		for (int i = 0; i < Q; i++){
 			getline(cin, line);
+			stringstream ss(line);
 			ss >> origen;
 			ss >> destino;
+			cout<< "origen="<< origen <<endl; 
+    		cout<< "destino="<< destino << endl; 
+    	
 			// calcular respuesta
-			result = minMax(arbol_mst, origen, destino);
-			if (result == 0)
-				printf("no path\n",count++, result);
-			else
-				printf("%d\n",count++, result);
+			int result = MaxEnElCamino(arbol_mst, origen, destino);
+			if (result == -1)
+				printf("no path\n");
+			else{
+				printf("%d\n",result);
+			}
+				
 		}
 		
 	}
-    //myfile.close();
     return 0;
 }
 
-Grafo  Arbol_MST(vector< tuple<int,int,int> > aristas, int V){
-    int v1, v2, p;
-	int costo_mst = 0;
-	Grafo arbol_mst  = Grafo(V);
-	// inciar conjuntos
-	
-	UFDS ds = UFDS(V);
 
-	// calcular costo y armar arbol
-    for (int i = 0; i < aristas.size(); i++) {
-        p  = get<0>(aristas[i]);
-        v1 = get<1>(aristas[i]);
-        v2 = get<2>(aristas[i]);
-        
-        if(!ds.same_set(v1, v2)){
-            costo_mst += p;
-            ds.union_set(v1, v2);
-            
-            arbol_mst.agregar_conex(v1, v2, p);
-        }
-    }
-	
-	return arbol_mst;
-}
-
-    //procear la respuesta
-int minMax(arbol, int inicio, int destino) {
-    int max = -1
+int MaxEnElCamino(Grafo arbol, int inicio, int destino) {
     int n = arbol.vertices;
     bool visit[n]; // Vector de nodos visitados
-    
-    for (auto it=arbol.adya_list[inicio].begin(); it!=arbol.adya_list[inicio].end(); it++)
-        int d = it->first;
-        int p = it->second;
-        if (!visit[d]){
-            if (p > max){
-                max = p;
-            } 
+    int max = -1;
+    visit[inicio-1] = true;
+    max = DFS_MaxEnElCamino(arbol, inicio, destino, visit, max);
+	
+	return max;
             
-            if (d == destino){
-                return max; 
-            }
-            else{
-                DFS(d);
-            }
 }
-void DFS (int i)
-    visit[i] = true;
-    
-    for (int w : grafo[i])
-        if (!visit[w])
-            
-            DFS(w);
+int DFS_MaxEnElCamino(Grafo arbol, int inicio, int destino, bool visit[], int max){
+    for (auto it=arbol.adya_list[inicio-1].begin(); it!=arbol.adya_list[inicio-1].end(); it++){
+    	int w = it->first;
+        int peso = it->second;
+        printf("vecino adyacente w=%d\n", w);
+    	if (!visit[w-1]){
+    		visit[w-1] = true;
+        	if (w != destino){
+        		printf("no es igual al destino, se mete en la recursion\n", w);
+            	max = DFS_MaxEnElCamino(arbol, w, destino, visit, max);
+            }
+            else if (peso > max){
+            	printf("llego al destino %d\n", w);
+            	max = peso;
+			}
+                
+        }
+	}
+	return max;			
 }
-
 
