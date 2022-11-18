@@ -46,6 +46,7 @@ no path
 #include <fstream>
 #include <tuple>
 
+
 using namespace std;
 
 struct UFDS {
@@ -92,11 +93,11 @@ class Grafo{
     }
     void agregar_conex(int v1,int v2,int lat){
     // conecttar v1 con v2 y viceversa
-    	printf("inicia conexion\n");
+    	
 	    adya_list[v1].push_back(make_pair(v2,lat));
-	    printf("conexion simetrica\n");
+	    
 	    adya_list[v2].push_back(make_pair(v1,lat));
-	    printf("conexion simetrica ok\n");
+	   
 	}
 };
 
@@ -104,18 +105,18 @@ Grafo  Arbol_MST(vector< tuple<int,int,int> > aristas, int V){
     int v1, v2, p;
 	Grafo arbol_mst  = Grafo(V);
 	// inciar conjuntos
-	UFDS ds = UFDS(V);
+	UFDS ds = UFDS(V+1);
 	// armar arbol MST
     for (int i = 0; i < aristas.size(); i++) {
         p  = get<0>(aristas[i]);
         v1 = get<1>(aristas[i]);
         v2 = get<2>(aristas[i]);
-        printf("se accede a la tupla\n");
+        //printf("se accede a la tupla\n");
         if(!ds.same_set(v1, v2)){
             ds.union_set(v1, v2);
-            printf("toca unir el v1=%d y v2=%d peso=%d\n", v1, v2, p);
+            //printf("toca unir el v1=%d y v2=%d peso=%d\n", v1, v2, p);
             arbol_mst.agregar_conex(v1, v2, p);
-            printf("se agrego conexion\n");
+            //printf("OKconexion\n");
         }
     }
 	return arbol_mst;
@@ -123,12 +124,13 @@ Grafo  Arbol_MST(vector< tuple<int,int,int> > aristas, int V){
 
 
 
-int DFS_MaxEnElCamino(Grafo arbol, int v, int destino, bool visit[], int max);
+int DFS_MaxEnElCamino(Grafo arbol, int v, int destino, bool visit[], int maximo_ini);
 int MaxEnElCamino(Grafo arbol, int inicio, int destino);
 
 int main(){
-	printf("runnn...\n");
-	
+	//printf("runnn...\n");
+	ofstream myfile;
+ 	myfile.open ("example2.txt");
     string line;
     int C, S, Q, v1, v2, p, count, origen, destino;
     //leer entrada para armar la red:
@@ -140,9 +142,9 @@ int main(){
 		ss >> C;
 		ss >> S;
 		ss >> Q;
-		cout<< "C="<< C <<endl; 
-    	cout<< "S="<< S << endl; 
-    	cout<< "Q="<< Q << endl;
+	//	cout<< "C="<< C <<endl; 
+    //	cout<< "S="<< S << endl; 
+    //	cout<< "Q="<< Q << endl;
 		
 		if (C + S + Q == 0) break;
 		
@@ -152,70 +154,85 @@ int main(){
 			ss >> v1;
 			ss >> v2;
 			ss >> p;
-			cout<< "v1="<< v1 <<endl; 
-	    	cout<< "v2="<< v2 << endl; 
-	    	cout<< "p="<< p << endl;
+			//cout<< "v1="<< v1 <<endl; 
+	    	//cout<< "v2="<< v2 << endl; 
+	    	//cout<< "p="<< p << endl;
 			aristas.push_back(make_tuple(p, v1, v2));
 		}
 		sort(aristas.begin(), aristas.end());
-		printf("se ordeno el sort\n");
-		if (count > 1) cout << endl; // dejar una linea en blanco entre casos
+		//printf("se ordeno el sort\n");
+		
 		
 		Grafo arbol_mst = Arbol_MST(aristas, C);
-		printf("se calculo el mst\n");
+		//printf("OK calculo el mst\n");
 		
-		printf("Case #%d\n",count++);
+		//printf("Case #%d\n",count++);
+		if (count > 1){  // dejar una linea en blanco entre casos
+			myfile << endl; 
+		} 
+		myfile << "Case #"<< count++ <<endl;
+		/*if (count == 60){  // dejar una linea en blanco entre casos
+			cout<< "C="<< C <<endl; 
+    	cout<< "S="<< S << endl; 
+    	cout<< "Q="<< Q << endl;
+			return 0; 
+		}*/
 		for (int i = 0; i < Q; i++){
 			getline(cin, line);
 			stringstream ss(line);
 			ss >> origen;
 			ss >> destino;
-			cout<< "origen="<< origen <<endl; 
-    		cout<< "destino="<< destino << endl; 
+			//cout<< "origen="<< origen <<endl; 
+    		//cout<< "destino="<< destino << endl; 
     	
 			// calcular respuesta
 			int result = MaxEnElCamino(arbol_mst, origen, destino);
 			if (result == -1)
-				printf("no path\n");
+				myfile << "no path"<<endl;
+				//printf("no path\n");
 			else{
-				printf("%d\n",result);
+				myfile << result <<endl;
+				//printf("%d\n",result);
 			}
 				
 		}
 		
 	}
+	myfile.close();
     return 0;
 }
 
 
 int MaxEnElCamino(Grafo arbol, int inicio, int destino) {
     int n = arbol.vertices;
-    bool visit[n]; // Vector de nodos visitados
-    int max = -1;
-    visit[inicio-1] = true;
-    max = DFS_MaxEnElCamino(arbol, inicio, destino, visit, max);
+    bool visit[n+1]; // Vector de nodos visitados
+    int maximo_ini = -1;
+    int resu = DFS_MaxEnElCamino(arbol, inicio, destino, visit, maximo_ini);
 	
-	return max;
+	return resu;
             
 }
-int DFS_MaxEnElCamino(Grafo arbol, int inicio, int destino, bool visit[], int max){
-    for (auto it=arbol.adya_list[inicio-1].begin(); it!=arbol.adya_list[inicio-1].end(); it++){
+int DFS_MaxEnElCamino(Grafo arbol, int inicio, int destino, bool visit[], int maximo_ini){
+	visit[inicio] = true;
+	if (inicio == destino){
+		return 0;
+	}
+	int maximo = -1;
+    for (auto it=arbol.adya_list[inicio].begin(); it!=arbol.adya_list[inicio].end(); it++){
     	int w = it->first;
         int peso = it->second;
-        printf("vecino adyacente w=%d\n", w);
-    	if (!visit[w-1]){
-    		visit[w-1] = true;
-        	if (w != destino){
-        		printf("no es igual al destino, se mete en la recursion\n", w);
-            	max = DFS_MaxEnElCamino(arbol, w, destino, visit, max);
-            }
-            else if (peso > max){
-            	printf("llego al destino %d\n", w);
-            	max = peso;
+        //printf("vecino adyacente w=%d\n", w);
+    	if (!visit[w]){
+        	//	printf("como no es igual al destino, se mete en la recursion\n", w);
+            	maximo = max(maximo, DFS_MaxEnElCamino(arbol, w, destino, visit, maximo));
+            if (maximo >= 0 ){
+            	//printf("llego al destino %d\n", w);
+            	maximo = max(maximo, peso);
+            	break;
 			}
                 
         }
 	}
-	return max;			
+	return maximo;			
 }
 
