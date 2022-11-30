@@ -1,71 +1,82 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> PRIMOS;
+vector<long int> PRIMOS;
 
-void criba(int n)
-{
-    bool nprimos[n + 1];
-	// a priori, se coloca todos en true (true->es primo, false->no lo es)
+void criba(long int n){
+	// guarda en la variable gloabl PRIMOS, los numeros primos entre 2 y name
+    bool cprimos[n + 1]; // un array para la criba de primos, a priori, se coloca
+	// todos en true (true->es primo, false->no lo es)
+	
     memset(cprimos, true, sizeof(cprimos));
 	cprimos[0] = false;
 	cprimos[1] = false;
-	
 	//se requiere iterar hasta que el cuadrado del siguiente número confirmado
 	//como primo es mayor que n.
 	//equivale a decir que alcanza con calcular entre 2 y sqrt(n)
-    for (int p = 2; p * p <= n; p++) {
+    for (long int p = 2; p * p <= n; p++) {
         //se toma el primer número no rayado ni marcado, como número primo.
 		//el 2 se marco true al iniciar
-        if (cprime[p] == true) {
+        if (cprimos[p]) {
             //se tachan todos los múltiplos del número que se acaba de indicar como primo.
-            for (int i = p * p; i <= n; i += p)
-                cprime[i] = false;
+            for (long int i = p * p; i <= n; i = i + p){
+                cprimos[i] = false;
+			}	
         }
     }
 	//Agergo los primos, segun lo que indica la criba boolean
-	  for (int i = 0; i <= n; i++){
-		  if (cprime[i]){
-			  PRIMOS.push_back(i);
-		  }
+	for (long int i = 0; i <= n; i++){
+	  if (cprimos[i]){
+		  PRIMOS.push_back(i);
 	  }
+	}
+	
 }
-    // Print all prime numbers
-    for (int p = 2; p <= n; p++)
-        if (prime[p])
-            cout << p << " ";
-}
-// calcular cantidad de divisores de un numero N
-// usar la propiedad
-//Si un número N = a ^i * b^j * … * c^k,
+    
+
+
+// calcula la cantidad de divisores de un numero N
+// usar la igualdad:
+//dada la factorización entero N = a ^i * b^j * … * c^k,
 //entonces N tiene (i+1) *(j+1)* … *(k+1) divisores.
 
-long long cantDiv(long long N){
-	// se requiere tener en una var global los primos entre 2 y el N
- long long pf_ind=0,
- long long pf = PRIMOS[pf_ind],
- long long resp = 1;
- while(pf * pf <= N) {
-	long long potencia = 0;
-	while(N % pf == 0){
-		N = N / pf;
-		potencia++;
+int CantDiv(int N){
+// se requiere tener en un arreglo global los primos entre 2 y el N
+	int cantdiv = 1; // a priori tiene un divisor (1)
+	int pf_indx=0; // indice del primer primo
+	int pf = PRIMOS[pf_indx]; //primer primo(=2)
+	while(pf * pf <= N) {
+		int exponente = 0;
+		while(N % pf == 0){ // si lo divide exacto es un factor primo
+			N = N / pf; // lo divido por ese factor primo
+			exponente++; // sumo 1 al exponente
+		}
+		cantdiv = cantdiv * (exponente +1);  // divisores = (exp_f1+1) *(exp_f2+1)* … *(exp_fk+1)
+		pf_indx++;
+		pf = PRIMOS[pf_indx]; // tomo el sig primo, (antes muevo el index ++pf_index)
 	}
-	resp = resp * (potencia +1);
-	pf = primos[++pf_ind];
- }
- if(N != 1) resp *= 2;
- 
- return resp;
+	if(N != 1) cantdiv *= 2;
+
+	return cantdiv;
 }
 
  
 // Driver Code
 int main()
 {
-    int n = 30;
-    cout << "Following are the prime numbers smaller "
-         << " than or equal to " << n << endl;
-    SieveOfEratosthenes(n);
+    long int n = 30;
+	long int pri;
+    cout << "Primos menor o igual a  " << n << endl;
+
+    criba(n);
+	
+	// Print el vector de primos
+    for (long int p = 0; p < PRIMOS.size(); p++){
+        pri = PRIMOS[p];
+        cout << pri << " ";
+	}
+	cout << "Cantidad de divisores de " << n << endl;
+	cout << CantDiv(n) << endl;
+	
     return 0;
 }
