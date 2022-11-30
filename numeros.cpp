@@ -4,13 +4,15 @@ using namespace std;
 vector<long int> PRIMOS;
 
 void criba(long int n){
+	
 	// guarda en la variable gloabl PRIMOS, los numeros primos entre 2 y name
     bool cprimos[n + 1]; // un array para la criba de primos, a priori, se coloca
 	// todos en true (true->es primo, false->no lo es)
-	
+	if (n == 1) 
     memset(cprimos, true, sizeof(cprimos));
 	cprimos[0] = false;
 	cprimos[1] = false;
+	if (n == 1) return;
 	//se requiere iterar hasta que el cuadrado del siguiente número confirmado
 	//como primo es mayor que n.
 	//equivale a decir que alcanza con calcular entre 2 y sqrt(n)
@@ -42,6 +44,8 @@ void criba(long int n){
 
 int CantDiv(int N){
 // se requiere tener en un arreglo global los primos entre 2 y el N
+	int uno = 1;
+	if (N == 1) return uno;
 	int cantdiv = 1; // a priori tiene un divisor (1)
 	int pf_indx=0; // indice del primer primo
 	int pf = PRIMOS[pf_indx]; //primer primo(=2)
@@ -64,7 +68,7 @@ int CantDiv(int N){
 // Driver Code
 int main()
 {
-    long int n = 30;
+    long int n = 1;
 	long int pri;
     cout << "Primos menor o igual a  " << n << endl;
 
