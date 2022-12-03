@@ -23,27 +23,35 @@ string char_to_str(char ch)
 }
 // Main function
 int main() 
-{	int g = 34943;
-	string msj = "Abc";
-	int resto;
-	// A = 01000001 = 65
-	int n = 0;
-	cout << " n = 0 y desplazado 8 bit"<< (n << 8) <<endl;
-	cout << "n= "<< n<< endl;
-	int m = msj[0] + (n << 8);
-	m = msj[1] + (m << 8);
-	cout << " m: "<< m <<endl;
-	cout << " resto: "<< m % g <<endl;
-	m = msj[2] + (m << 8);
-	cout << " m: "<< m <<endl;
-	cout << " resto: "<< m % g <<endl;
-
-	int j = 1;
-	cout << " desplazo 16 lugares: "<< (j<<16)<<endl;
+{	int Q = 34943; // generador
+	char resul[5]; // para formatear la salida
+	string msj; // donde se guarda el input (el mensaje m)
 	
-	
-	
-    cout << "Binary Representation of given number: ";
-    // Printing the binary representation of the given decimal number
-
+	getline(cin, msj);
+	while (msj != "#"){
+		
+		// se utiliza la propiedad de aritm modular (A+B)%Q = (A % Q + B % Q) %Q
+		long long int acum_resto = msj[0];
+		for (int i = 1; i< msj.size();i++){
+			acum_resto = (acum_resto % Q);
+			acum_resto = acum_resto * 256; // antes de sumar hay que correr la posición del byte a la izq
+			acum_resto = acum_resto + msj[i];
+		}
+		// el CRC ocupa 16 bits, de desplaza 2 bytes a la izq el acum.
+		acum_resto = acum_resto * 256 * 256;
+		acum_resto = acum_resto % Q;
+		
+		// para que sea divisible, el resto debe dar 0,=>
+		// lo que le falta a 'acum_resto' para llegar al Q (divisor)
+		// es el valor que hay que sumar,	
+		// ese valor es el CRC
+		int CRC = Q - acum_resto;
+		
+		sprintf (resul, "%04X", CRC); // guarda como un string resul, el formateo
+		printf("%c%c %c%c\n", resul[0], resul[1], resul[2], resul[3]);
+		
+		
+		getline(cin, msj);
+	}
+	return 0;
 }
