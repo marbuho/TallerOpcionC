@@ -29,6 +29,11 @@ int main()
 	
 	getline(cin, msj);
 	while (msj != "#"){
+		if (msj.size()==0){
+			cout << "00 00"<<endl;
+			getline(cin, msj);
+			continue;
+		} 
 		
 		// se utiliza la propiedad de aritm modular (A+B)%Q = (A % Q + B % Q) %Q
 		long long int acum_resto = msj[0];
