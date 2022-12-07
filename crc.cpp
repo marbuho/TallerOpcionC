@@ -15,13 +15,7 @@ Sample Output
 #include <bits/stdc++.h>
 using namespace std;
 
-// convierte ascii caracter a binario
-string char_to_str(char ch)
-{
-    bitset<8> temp(ch);
-    return temp.to_string();
-}
-// Main function
+
 int main() 
 {	int Q = 34943; // generador
 	char resul[5]; // para formatear la salida
@@ -36,15 +30,15 @@ int main()
 		} 
 		
 		// se utiliza la propiedad de aritm modular (A+B)%Q = (A % Q + B % Q) %Q
-		long long int acum_resto = msj[0];
-		for (int i = 1; i< msj.size();i++){
-			acum_resto = (acum_resto % Q);
-			acum_resto = acum_resto * 256; // antes de sumar hay que correr la posición del byte a la izq
-			acum_resto = acum_resto + msj[i];
+		
+		long long int acum_resto = 0;
+		for (int i = 0; i< msj.size();i++){
+			acum_resto = acum_resto * 256; //antes de sumar hay que correr la posición del byte a la izq
+			acum_resto = acum_resto + msj[i];//578->579
+			acum_resto = (acum_resto % Q);//2->2
 		}
-		// el CRC ocupa 16 bits, de desplaza 2 bytes a la izq el acum.
-		acum_resto = acum_resto * 256 * 256;
-		acum_resto = acum_resto % Q;
+		// el CRC ocupa 16 bits, de desplaza 2 veces a izq 
+		acum_resto = (acum_resto * 256 % Q) * 256 % Q;
 		
 		// para que sea divisible, el resto debe dar 0,=>
 		// lo que le falta a 'acum_resto' para llegar al Q (divisor)
