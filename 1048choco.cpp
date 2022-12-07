@@ -31,8 +31,8 @@ int main(){
 				acum_r = acum_r % N;
 			}
 			
-			resul = resul + acum_r;
-			resul = resul % N;						
+			resul = resul + acum_r; // acumulo y sigo caja la sig caja
+			resul = resul % N;		// el % C "de afuera"				
 		}
 		printf("%d\n", resul);
 	}
