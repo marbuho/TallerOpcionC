@@ -20,7 +20,8 @@ int main()
 {	int Q = 34943; // generador
 	char resul[5]; // para formatear la salida
 	string msj; // donde se guarda el input (el mensaje m)
-	
+	ofstream myfile;
+ 	myfile.open ("salida5.txt");
 	getline(cin, msj);
 	while (msj != "#"){
 		if (msj.size()==0){
@@ -49,8 +50,9 @@ int main()
 		sprintf (resul, "%04X", CRC); // guarda como un string resul, el formateo
 		printf("%c%c %c%c\n", resul[0], resul[1], resul[2], resul[3]);
 		
-		
+		myfile << resul[0] << resul[1] <<  resul[2] << resul[3]<< endl;
 		getline(cin, msj);
 	}
+	myfile.close();
 	return 0;
 }
